@@ -2,53 +2,80 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>FinSight</title>
+    <title>Finsight Stats</title>
 </head>
 <body>
-    <div id="FinSightConfigPage" data-role="page" class="page type-interior pluginConfigurationPage" data-require="emby-input,emby-button,emby-select,emby-checkbox">
+    <div id="FinsightConfigPage" data-role="page" class="page type-interior pluginConfigurationPage" data-require="emby-input,emby-button,emby-select,emby-checkbox">
         <div data-role="content">
             <div class="content-primary">
-                <form id="FinSightConfigForm">
-                    <div class="selectContainer">
-                        <label class="selectLabel" for="Options">Several Options</label>
-                        <select is="emby-select" id="Options" name="Options" class="emby-select-withcolor emby-select">
-                            <option id="optOneOption" value="OneOption">One Option</option>
-                            <option id="optAnotherOption" value="AnotherOption">Another Option</option>
-                        </select>
-                    </div>
-                    <div class="inputContainer">
-                        <label class="inputLabel inputLabelUnfocused" for="AnInteger">An Integer</label>
-                        <input id="AnInteger" name="AnInteger" type="number" is="emby-input" min="0" />
-                        <div class="fieldDescription">A Description</div>
-                    </div>
-                    <div class="checkboxContainer checkboxContainer-withDescription">
-                        <label class="emby-checkbox-label">
-                            <input id="TrueFalseSetting" name="TrueFalseCheckBox" type="checkbox" is="emby-checkbox" />
-                            <span>A Checkbox</span>
-                        </label>
-                    </div>
-                    <div class="inputContainer">
-                        <label class="inputLabel inputLabelUnfocused" for="AString">A String</label>
-                        <input id="AString" name="AString" type="text" is="emby-input" />
-                        <div class="fieldDescription">Another Description</div>
-                    </div>
-                    <div>
-                        <button is="emby-button" type="submit" class="raised button-submit block emby-button">
-                            <span>Save</span>
-                        </button>
+                <form id="FinsightConfigForm">
+                    <div class="verticalSection">
+                        <h2>Listening Stats Configuration</h2>
+
+                        <div class="selectContainer">
+                            <label class="selectLabel" for="Options">Several Options</label>
+                            <select is="emby-select" id="Options" name="Options" class="emby-select-withcolor emby-select">
+                                <option id="optOneOption" value="OneOption">One Option</option>
+                                <option id="optAnotherOption" value="AnotherOption">Another Option</option>
+                            </select>
+                        </div>
+                        <div class="inputContainer">
+                            <label class="inputLabel inputLabelUnfocused" for="AnInteger">An Integer</label>
+                            <input id="AnInteger" name="AnInteger" type="number" is="emby-input" min="0" />
+                            <div class="fieldDescription">A Description</div>
+                        </div>
+                        <div class="checkboxContainer checkboxContainer-withDescription">
+                            <label class="emby-checkbox-label">
+                                <input id="TrueFalseSetting" name="TrueFalseCheckBox" type="checkbox" is="emby-checkbox" />
+                                <span>A Checkbox</span>
+                            </label>
+                        </div>
+                        <div class="inputContainer">
+                            <label class="inputLabel inputLabelUnfocused" for="AString">A String</label>
+                            <input id="AString" name="AString" type="text" is="emby-input" />
+                            <div class="fieldDescription">Another Description</div>
+                        </div>
+                        <div>
+                            <button is="emby-button" type="submit" class="raised button-submit block emby-button">
+                                <span>Save</span>
+                            </button>
+                        </div>
                     </div>
                 </form>
+
+                <div class="verticalSection">
+                    <h2>Your Listening Stats</h2>
+                    <div class="inputContainer">
+                        <label class="inputLabel" for="statsYear">Select Year:</label>
+                        <select is="emby-select" id="statsYear" name="statsYear">
+                            <option value="2025">2025</option>
+                            <option value="2024">2024</option>
+                            <option value="2023">2023</option>
+                        </select>
+                    </div>
+                    <button is="emby-button" type="button" id="viewStatsBtn" class="raised block">
+                        <span>View My Stats</span>
+                    </button>
+                    <button is="emby-button" type="button" id="viewAlbumArtistsBtn" class="raised block">
+                        <span>View Album Artists</span>
+                    </button>
+                    <button is="emby-button" type="button" id="viewArtistsBtn" class="raised block">
+                        <span>View Artists</span>
+                    </button>
+                    <button is="emby-button" type="button" id="viewWrappedBtn" class="raised block emby-button-tv">
+                        <span>View Wrapped Experience</span>
+                    </button>
+                </div>
             </div>
         </div>
-        <script type="text/javascript">
-            var FinSightConfig = {
-                pluginUniqueId: '3f8364e7-c69c-4574-bcd0-96cdd592e408'
+        <script type="text/javascript">var FinsightConfig = {
+                pluginUniqueId: '16cc3e3a-d475-47b2-8412-75e2eaf55ebe'
             };
 
-            document.querySelector('#FinSightConfigPage')
+            document.querySelector('#FinsightConfigPage')
                 .addEventListener('pageshow', function() {
                     Dashboard.showLoadingMsg();
-                    ApiClient.getPluginConfiguration(FinSightConfig.pluginUniqueId).then(function (config) {
+                    ApiClient.getPluginConfiguration(FinsightConfig.pluginUniqueId).then(function (config) {
                         document.querySelector('#Options').value = config.Options;
                         document.querySelector('#AnInteger').value = config.AnInteger;
                         document.querySelector('#TrueFalseSetting').checked = config.TrueFalseSetting;
@@ -57,22 +84,76 @@
                     });
                 });
 
-            document.querySelector('#FinSightConfigForm')
+            document.querySelector('#FinsightConfigForm')
                 .addEventListener('submit', function(e) {
                 Dashboard.showLoadingMsg();
-                ApiClient.getPluginConfiguration(FinSightConfig.pluginUniqueId).then(function (config) {
+                    ApiClient.getPluginConfiguration(FinsightConfig.pluginUniqueId).then(function (config) {
                     config.Options = document.querySelector('#Options').value;
                     config.AnInteger = document.querySelector('#AnInteger').value;
                     config.TrueFalseSetting = document.querySelector('#TrueFalseSetting').checked;
                     config.AString = document.querySelector('#AString').value;
-                    ApiClient.updatePluginConfiguration(FinSightConfig.pluginUniqueId, config).then(function (result) {
+                    ApiClient.updatePluginConfiguration(FinsightConfig.pluginUniqueId, config).then(function (result) {
                         Dashboard.processPluginConfigurationUpdateResult(result);
                     });
                 });
 
                 e.preventDefault();
                 return false;
-            });
+                });
+
+            document.querySelector('#viewArtistsBtn').addEventListener('click', function () {
+                var year = document.querySelector('#statsYear').value;
+                var userId = ApiClient.getCurrentUserId();
+
+                var url = ApiClient.getUrl('/Artists');
+
+                fetch(url, {
+                    headers: {
+                        'Authorization': 'MediaBrowser Token="' + ApiClient.accessToken() + '""',
+                        'X-Emby-Token': ApiClient.accessToken(),
+                    }
+                })
+                .then(function (response) {
+                    if (!response.ok) {
+                        throw new Error('HTTP ' + response.status);
+                    }
+
+                    return response.json();
+                })
+                .then(function (data) {
+                    console.log(data);
+                })
+                .catch(function (error) {
+                    console.error('Error:', error);
+                });
+            })
+
+            document.querySelector('#viewAlbumArtistsBtn').addEventListener('click', function () {
+                var year = document.querySelector('#statsYear').value;
+                var userId = ApiClient.getCurrentUserId();
+
+                var url = ApiClient.getUrl('/Artists/AlbumArtists');
+
+                fetch(url, {
+                    headers: {
+                        'Authorization': 'MediaBrowser Token="' + ApiClient.accessToken() + '""',
+                        'X-Emby-Token': ApiClient.accessToken(),
+                    }
+                })
+                    .then(function (response) {
+                        if (!response.ok) {
+                            throw new Error('HTTP ' + response.status);
+                        }
+
+                        return response.json();
+                    })
+                    .then(function (data) {
+                        console.log(data);
+                    })
+                    .catch(function (error) {
+                        console.error('Error:', error);
+                    });
+            })
         </script>
     </div>
 </body>

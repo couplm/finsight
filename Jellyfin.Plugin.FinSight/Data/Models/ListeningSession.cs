@@ -1,6 +1,6 @@
-﻿namespace Jellyfin.Plugin.Finsight.Data.Models;
+namespace Jellyfin.Plugin.Finsight.Data.Models;
 
-internal class ListeningSession
+public class ListeningSession
 {
     public Guid Id { get; set; }
 

@@ -1,9 +1,7 @@
-﻿namespace Jellyfin.Plugin.Finsight.Data.Models;
+namespace Jellyfin.Plugin.Finsight.Data.Models;
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 
 public class UserYearStats
 {
@@ -21,4 +19,3 @@ public class UserYearStats
 
     public List<string> TopGenres { get; set; } = new();
 }
-

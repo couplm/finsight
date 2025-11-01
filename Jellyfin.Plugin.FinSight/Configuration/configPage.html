@@ -65,15 +65,22 @@
                     <button is="emby-button" type="button" id="viewWrappedBtn" class="raised block emby-button-tv">
                         <span>View Wrapped Experience</span>
                     </button>
+                    <button is="emby-button" type="button" id="testingBtn" class="raised block">
+                        <span>Test API</span>
+                    </button>
+                    <button is="emby-button" type="button" id="apiBtn" class="raised block">
+                        <span>API Button</span>
+                    </button>
                 </div>
             </div>
         </div>
-        <script type="text/javascript">var FinsightConfig = {
+        <script type="text/javascript">
+    var FinsightConfig = {
                 pluginUniqueId: '16cc3e3a-d475-47b2-8412-75e2eaf55ebe'
             };
 
             document.querySelector('#FinsightConfigPage')
-                .addEventListener('pageshow', function() {
+                .addEventListener('pageshow', function () {
                     Dashboard.showLoadingMsg();
                     ApiClient.getPluginConfiguration(FinsightConfig.pluginUniqueId).then(function (config) {
                         document.querySelector('#Options').value = config.Options;
@@ -85,20 +92,20 @@
                 });
 
             document.querySelector('#FinsightConfigForm')
-                .addEventListener('submit', function(e) {
-                Dashboard.showLoadingMsg();
+                .addEventListener('submit', function (e) {
+                    Dashboard.showLoadingMsg();
                     ApiClient.getPluginConfiguration(FinsightConfig.pluginUniqueId).then(function (config) {
-                    config.Options = document.querySelector('#Options').value;
-                    config.AnInteger = document.querySelector('#AnInteger').value;
-                    config.TrueFalseSetting = document.querySelector('#TrueFalseSetting').checked;
-                    config.AString = document.querySelector('#AString').value;
-                    ApiClient.updatePluginConfiguration(FinsightConfig.pluginUniqueId, config).then(function (result) {
-                        Dashboard.processPluginConfigurationUpdateResult(result);
+                        config.Options = document.querySelector('#Options').value;
+                        config.AnInteger = document.querySelector('#AnInteger').value;
+                        config.TrueFalseSetting = document.querySelector('#TrueFalseSetting').checked;
+                        config.AString = document.querySelector('#AString').value;
+                        ApiClient.updatePluginConfiguration(FinsightConfig.pluginUniqueId, config).then(function (result) {
+                            Dashboard.processPluginConfigurationUpdateResult(result);
+                        });
                     });
-                });
 
-                e.preventDefault();
-                return false;
+                    e.preventDefault();
+                    return false;
                 });
 
             document.querySelector('#viewArtistsBtn').addEventListener('click', function () {
@@ -113,19 +120,19 @@
                         'X-Emby-Token': ApiClient.accessToken(),
                     }
                 })
-                .then(function (response) {
-                    if (!response.ok) {
-                        throw new Error('HTTP ' + response.status);
-                    }
+                    .then(function (response) {
+                        if (!response.ok) {
+                            throw new Error('HTTP ' + response.status);
+                        }
 
-                    return response.json();
-                })
-                .then(function (data) {
-                    console.log(data);
-                })
-                .catch(function (error) {
-                    console.error('Error:', error);
-                });
+                        return response.json();
+                    })
+                    .then(function (data) {
+                        console.log(data);
+                    })
+                    .catch(function (error) {
+                        console.error('Error:', error);
+                    });
             })
 
             document.querySelector('#viewAlbumArtistsBtn').addEventListener('click', function () {
@@ -153,6 +160,52 @@
                     .catch(function (error) {
                         console.error('Error:', error);
                     });
+            })
+
+            document.querySelector('#testingBtn').addEventListener('click', function () {
+                var url = ApiClient.getUrl('/Finsight/User/e9c36d2402184fc29d6f5dde51b71448/Artists');
+
+                fetch(url, {
+                    headers: {
+                        'Authorization': 'MediaBrowser Token="' + ApiClient.accessToken() + '""',
+                        'X-Emby-Token': ApiClient.accessToken(),
+                    }
+                })
+                    .then(function (response) {
+                        if (!response.ok) {
+                            throw new Error('HTTP ' + response.status);
+                        }
+
+                        return response.json();
+                    })
+                    .then(function (data) {
+                        console.log(data);
+                    })
+                    .catch(function (error) {
+                        console.error('Error:', error);
+                    });
+            })
+
+            document.querySelector('#apiBtn').addEventListener('click', function () {
+                var url = ApiClient.getUrl('/Users/e9c36d2402184fc29d6f5dde51b71448/Items/Played');
+                fetch(url, {
+                    headers: {
+                        'Authorization': 'MediaBrowser Token="' + ApiClient.accessToken() + '""',
+                        'X-Emby-Token': ApiClient.accessToken(),
+                    }
+                })
+                .then(function (response) {
+                    if (!response.ok) {
+                        throw new Error('HTTP ' + response.status);
+                    }
+                    return response.json();
+                })
+                .then(function (data) {
+                    console.log(data);
+                })
+                .catch(function (error) {
+                    console.error('Error:', error);
+                });
             })
         </script>
     </div>

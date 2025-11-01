@@ -1,0 +1,11 @@
+[
+    {
+        "category": "Metadata",
+        "guid": "16cc3e3a-d475-47b2-8412-75e2eaf55ebe",
+        "name": "Finsight",
+        "description": "Finsight provides music listening data from Jellyfin",
+        "owner": "couplm",
+        "overview": "Finsight is a plugin for Jellyfin that provides detailed insights and analytics about your music listening history, favourite artists, albums, and genres, and presents this data in an easy-to-understand format.",
+        "versions": []
+    }
+]

@@ -1,13 +1,13 @@
+namespace Jellyfin.Plugin.Finsight;
+
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using Jellyfin.Plugin.FinSight.Configuration;
+using Jellyfin.Plugin.Finsight.Configuration;
 using MediaBrowser.Common.Configuration;
 using MediaBrowser.Common.Plugins;
 using MediaBrowser.Model.Plugins;
 using MediaBrowser.Model.Serialization;
-
-namespace Jellyfin.Plugin.FinSight;
 
 /// <summary>
 /// The main plugin.
@@ -25,16 +25,16 @@ public class Plugin : BasePlugin<PluginConfiguration>, IHasWebPages
         Instance = this;
     }
 
-    /// <inheritdoc />
-    public override string Name => "FinSight";
-
-    /// <inheritdoc />
-    public override Guid Id => Guid.Parse("3f8364e7-c69c-4574-bcd0-96cdd592e408");
-
     /// <summary>
     /// Gets the current plugin instance.
     /// </summary>
     public static Plugin? Instance { get; private set; }
+
+    /// <inheritdoc />
+    public override string Name => "Finsight";
+
+    /// <inheritdoc />
+    public override Guid Id => Guid.Parse("16cc3e3a-d475-47b2-8412-75e2eaf55ebe");
 
     /// <inheritdoc />
     public IEnumerable<PluginPageInfo> GetPages()
@@ -43,9 +43,15 @@ public class Plugin : BasePlugin<PluginConfiguration>, IHasWebPages
         [
             new PluginPageInfo
             {
-                Name = Name,
-                EmbeddedResourcePath = string.Format(CultureInfo.InvariantCulture, "{0}.Configuration.configPage.html", GetType().Namespace)
-            }
+                Name = this.Name,
+                EmbeddedResourcePath = string.Format(CultureInfo.InvariantCulture, "{0}.Configuration.configPage.html", GetType().Namespace),
+            },
+            new PluginPageInfo
+            {
+                Name = "Artists",
+                EmbeddedResourcePath = string.Format(CultureInfo.InvariantCulture, "{0}.Pages.artists.html", GetType().Namespace),
+                EnableInMainMenu = true,
+            },
         ];
     }
 }

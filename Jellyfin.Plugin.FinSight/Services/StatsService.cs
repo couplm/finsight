@@ -1,15 +1,13 @@
-﻿namespace Jellyfin.Plugin.Finsight.Services;
+namespace Jellyfin.Plugin.Finsight.Services;
 
 using System.Threading.Tasks;
-using Jellyfin.Data.Enums;
 using Jellyfin.Plugin.Finsight.Data.Models;
 using Jellyfin.Plugin.Finsight.Data.Repository;
-using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.Audio;
 using MediaBrowser.Controller.Library;
 using Microsoft.Extensions.Logging;
 
-internal class StatsService : IStatsService
+public class StatsService : IStatsService
 {
     private readonly IStatsRepository repository;
     private readonly ILibraryManager libraryManager;
@@ -25,12 +23,6 @@ internal class StatsService : IStatsService
         this.logger = logger;
     }
 
-    /// <summary>
-    /// Get general user stats for a specified year.
-    /// </summary>
-    /// <param name="userId">User ID.</param>
-    /// <param name="year">Year to filter to.</param>
-    /// <returns>User stats for a specified year.</returns>
     public async Task<UserYearStats> GetUserYearStatsAsync(Guid userId, int year)
     {
         var stats = new UserYearStats
@@ -90,63 +82,17 @@ internal class StatsService : IStatsService
         return stats;
     }
 
-    /// <summary>
-    /// Get artist stats for a user, optionally filtered by year.
-    /// </summary>
-    /// <param name="userId">User ID.</param>
-    /// <param name="year">Year.</param>
-    /// <returns>List of artist stats.</returns>
-    public async Task<List<ArtistStats>> GetUserArtistsWithStatsAsync(Guid userId, int? year = null)
+    public async Task<List<ArtistStats>> GetUserArtistsWithStatsAsync(Guid userId, int year = 2025)
     {
-        return await this.repository.GetUserArtistsWithStatsAsync(userId, year);
+        var artistStats = await this.repository.GetTopArtistsAsync(userId, year, 50);
+
+        return artistStats;
     }
 
-    /// <summary>
-    /// Get song stats for a user, optionally filtered by year.
-    /// </summary>
-    /// <param name="userId">User ID.</param>
-    /// <param name="year">Year.</param>
-    /// <returns>List of song stats.</returns>
-    public async Task<List<SongStats>> GetUserSongsWithStatsAsync(Guid userId, int? year = null)
+    public async Task<List<SongStats>> GetUserSongsWithStatsAsync(Guid userId, int year = 2025)
     {
-        return await this.repository.GetUserSongsWithStatsAsync(userId, year);
-    }
+        var songStats = await this.repository.GetTopSongsAsync(userId, year, 50);
 
-    /// <summary>
-    /// Get all artists in the library.
-    /// </summary>
-    /// <returns>List of artists.</returns>
-    public async Task<List<ArtistStats>> GetAllArtistsAsync()
-    {
-        return await Task.Run(() =>
-        {
-            var query = new InternalItemsQuery
-            {
-                IncludeItemTypes = new[] { BaseItemKind.MusicArtist },
-                Recursive = true,
-            };
-
-            var result = this.libraryManager.GetItemsResult(query);
-            return result.Items.ToList();
-        });
-    }
-
-    /// <summary>
-    /// Get all songs in the library.
-    /// </summary>
-    /// <returns>List of songs.</returns>
-    public async Task<List<SongStats>> GetAllSongsAsync()
-    {
-        return await Task.Run(() =>
-        {
-            var query = new InternalItemsQuery
-            {
-                IncludeItemTypes = new[] { BaseItemKind.Audio },
-                Recursive = true,
-            };
-
-            var result = this.libraryManager.GetItemsResult(query);
-            return result.Items.ToList();
-        });
+        return songStats;
     }
 }
